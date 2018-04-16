@@ -1,4 +1,5 @@
-import {html, render} from 'lit-html/lib/lit-extended';
+import React from 'react';
+import {render} from 'react-dom';
 import throttle from 'lodash.throttle';
 import {
   ROWS,
@@ -105,23 +106,26 @@ export default class SnakeGame {
   }
 
   template() {
-    return html`<div class$="game ${this.gameState === 'end' ? 'end' : ''}">
-      <div class="table">
-        ${this.table.map(cols => html`
-          <div class="table__row">
-            ${cols.map(cell => html`<div class$="table__cell ${cell === 'joint' ? 'joint' : cell === 'fruit' ? 'fruit' : ''}"></div>`)}
-          </div>`)}
+    return <div className={`game ${this.gameState === 'end' ? 'end' : ''}`}>
+      <div className="table">
+        {this.table.map(cols => <div className="table__row">
+          {cols.map(cell => <div className={`table__cell ${cell === 'joint' ? 'joint' : cell === 'fruit' ? 'fruit' : ''}`}></div>)}
+        </div>)}
       </div>
-      <div class="description">
-        ${this.gameState === 'end' ? html`
-          기록: ${this.logic.joints.length}
-          <button class="button restart-button" on-click="${e => {this.init(); this.start();}}">다시 시작</button>
-        ` : this.gameState === 'running' ? html`
-          현재 길이: ${this.logic.joints.length}
-        ` : html`
-          <button class="button start-button" on-click="${e => this.start()}">게임 시작</button>
-        `}
+      <div className="description">
+        {
+          this.gameState === 'end'
+          ? <div>
+            <span>기록: {this.logic.joints.length}</span>
+            <button className="button restart-button" onClick={e => {this.init(); this.start();}}>다시 시작</button>
+          </div>
+          : this.gameState === 'running'
+          ? <div>
+            현재 길이: {this.logic.joints.length}
+          </div>
+          : <button className="button start-button" onClick={e => this.start()}>게임 시작</button>
+        }
       </div>
-    </div>`;
+    </div>
   }
 }
